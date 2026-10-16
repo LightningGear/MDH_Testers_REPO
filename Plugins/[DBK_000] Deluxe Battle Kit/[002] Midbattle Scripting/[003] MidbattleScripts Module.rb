@@ -1948,7 +1948,7 @@ PDAWN_MIDBATTLE = {
 	"setBattler" => :Opposing,
 	"teamEffects" => [:Spikes, 3, "Dawn scatters vicious spikes across the field!"]
  },
- "RoundEnd_foe_repeat_every_3" => {
+ "RoundEnd_foe_repeat_every_6" => {
     "setBattler" => :Opposing,
 	"battlerAbility" => :NORMALIZE,
     "addVariable" => 1,
