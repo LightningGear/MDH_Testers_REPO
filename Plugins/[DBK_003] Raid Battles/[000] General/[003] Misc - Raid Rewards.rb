@@ -62,6 +62,15 @@ def pbGenerateRaidRewards(pokemon, style = :Basic, rank = nil, loot = nil, weath
   # Adds rewards related to raid type.
   #-----------------------------------------------------------------------------
   case style
+  when :Basic
+    # Species bonuses for the route dens (including their evolved encounters).
+    case pokemon.species
+    when :MACHOP, :MACHOKE, :MACHAMP, :MAKUHITA, :HARIYAMA, :SAWK, :THROH
+      rewards.push([:BLACKBELT, 1])
+    when :CLOYSTER, :SWALOT, :SHELLDER, :GULPIN
+      rewards.push([:BIGPEARL, 1])
+      rewards.push([:PEARL, 1])
+    end
   when :Ultra
     rewards.push([:ZBOOSTER, 1]) if pokemon.isSpecies?(:NECROZMA)
   when :Max
@@ -72,7 +81,7 @@ def pbGenerateRaidRewards(pokemon, style = :Basic, rank = nil, loot = nil, weath
       rewards.push([:MAXHONEY, 1])
     when :PARASECT, :BRELOOM, :AMOONGUS, :SHIINOTIC, :TOEDSCRUEL
       rewards.push([:MAXMUSHROOMS, 1])
-	when :MAHOKE, :SAWK, :THROH, :MACHOP, :MAKUHITA
+	when :MACHOKE, :SAWK, :THROH, :MACHOP, :MAKUHITA
       rewards.push([:BLACKBELT, 1])
 	when :CLOYSTER, :SWALOT, :SHELLDER, :GULPIN
       rewards.push([:BIGPEARL, 1])

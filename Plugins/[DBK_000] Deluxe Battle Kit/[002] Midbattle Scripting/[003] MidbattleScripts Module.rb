@@ -1665,10 +1665,94 @@ MILTANK_MIDBATTLE   = {
   }
  }
 
-BANETTE_MIDBATTLE   = {
-  # She big now.
+# Banette: edit the battle here, like the other boss midbattles.
+BANETTE_MIDBATTLE = {
   "RoundStartCommand_1_foe" => {
-    "dynamax" => "Banette giggles... What's happening?!"
+    "setVariable" => 0,
+    "battlerHPCap" => 70,
+    "disableBalls" => true,
+    "addWild_A" => [:SHUPPET, 48],
+    "addWild_B" => [:SHUPPET, 50],
+    "setBattler_A" => 3,
+    "battlerName_A" => "Lonely Doll",
+    "battlerMoves_A" => [:HEX, :LIGHTSCREEN, :REFLECT, :PROTECT],
+    "setBattler_B" => 5,
+    "battlerName_B" => "Angry Doll",
+    "battlerMoves_B" => [:SHADOWBALL, :FAKETEARS, :WILLOWISP, :HEX],
+    "setBattler_C" => 1,
+    "text" => "Two forgotten dolls stir beside Banette. Every three hits tighten her Grudge Stitches!"
+  },
+
+  # GRUDGE STITCHES: each hit on Banette adds one; every third hit retaliates.
+  "TargetTookDamage_BANETTE_foe_repeat" => {
+    "addVariable" => 1,
+    "text" => "Another grudge stitch tightens!"
+  },
+  "VariableUp_repeat_every_3" => {
+    "setBattler" => :Opposing,
+    "battlerStats" => [:ATTACK, -1, :SPECIAL_ATTACK, -1],
+    "text" => "A doll's memory whispers: Don't touch my things."
+  },
+
+  # PHASE TWO: 70% HP. End Magic Guard and absorb the mansion's energy.
+  "BattlerReachedHPCap_BANETTE_foe" => {
+    "battlerInnates" => [:INFILTRATOR],
+    "bossDynamax" => "The mansion's grief pours into Banette!",
+    "battlerHPCap" => 25,
+    "setBattler_A" => 3,
+    "battlerStats_A" => [:SPECIAL_ATTACK, 1, :SPEED, 1],
+    "setBattler_B" => 5,
+    "battlerStats_B" => [:SPECIAL_ATTACK, 1, :SPEED, 1],
+    "setBattler_C" => 1,
+    "text" => "The dolls whisper: You can't take our family."
+  },
+
+  # The first summoned doll occupies foe slot 2 (battler index 3).
+  "RoundEnd_foe2_repeat_every_3" => {
+    "ignoreAfter" => "BattlerHPCritical_BANETTE_foe",
+    "setBattler" => 1,
+    "battlerHP" => 4,
+    "text" => "The Lonely Doll whispers: Stay with us. Its thread repairs Banette."
+  },
+  "BattlerFainted_SHUPPET_foe_repeat" => {
+    "ignoreUntil" => "BattlerReachedHPCap_BANETTE_foe",
+    "ignoreAfter" => "BattlerHPCritical_BANETTE_foe",
+    "setBattler" => 1,
+    "battlerStats" => [:DEFENSE, -1, :SPECIAL_DEFENSE, -1, :SPECIAL_ATTACK, 1],
+    "text" => "A whisper tears through the room: You broke them."
+  },
+  "AfterSwitchIn_player_repeat" => {
+    "ignoreAfter" => "BattlerHPCritical_BANETTE_foe",
+    "setBattler" => 1,
+    "battlerHP" => 2,
+    "text" => "The mansion whispers: Don't leave. Banette clings to its fading warmth."
+  },
+
+  # DESPERATION: 25% HP. No healing, no more dolls, no items.
+  "BattlerHPCritical_BANETTE_foe" => {
+    "unDynamax" => true,
+    "battlerHPCap" => nil,
+    "battlerStatus" => :NONE,
+    "battlerItem" => :BANETTITE,
+    "megaEvolve" => "The stitches holding Banette together begin to snap!",
+    "battlerMoves" => [:SHADOWCLAW, :KNOCKOFF, :SHADOWSNEAK, :PLAYROUGH],
+    "battlerStats" => [:ATTACK, 2, :SPEED, 1, :DEFENSE, -2, :SPECIAL_DEFENSE, -2],
+    "disableItems" => true,
+    "setBattler_A" => 3,
+    "battlerHP_A" => -100,
+    "setBattler_B" => 5,
+    "battlerHP_B" => -100,
+    "setBattler_C" => 1,
+    "text" => "The mansion falls silent. For the first time, nothing answers her."
+  },
+  "RoundEnd_foe1_repeat_every_2" => {
+    "ignoreUntil" => "BattlerHPCritical_BANETTE_foe",
+    "battlerStats" => [:ATTACK, 1, :DEFENSE, -1, :SPECIAL_DEFENSE, -1],
+    "text" => "Banette's grudge grows stronger as her seams unravel!"
+  },
+  "BattlerFainted_BANETTE_foe" => {
+    "text" => "Banette's grudge loosens. The remaining dolls fall still.",
+    "endBattle" => 1
   }
 }
 
@@ -1992,7 +2076,7 @@ ABOMINEON_MIDBATTLE = {
 
 SERPERIOR_MIDBATTLE = {
   "RoundStartCommand_1_foe" => {
-    "setBattler" => :Opposing,
+    "setBattler" => :Self,
     "changeTerrain" => :Grassy,
     "playSE" => "Anim/GrassyTerrain",
     "text" => ["Verdant grass surges across the battlefield, pulsing with life!"],
@@ -2126,8 +2210,9 @@ HOUNDOOM_REMATCH_MIDBATTLE = {
    "setBattler"   => :Opposing,
    "battlerStats" => [:DEFENSE, -1]
   },
- "BattlerReachedHPCap_foe" => {
-    "battlerHPCap" => 0,
+ "BattlerReachedHPCap_HOUNDOOMx_foe" => {
+    # Guarantee a surviving hit at 25% HP before the Mega desperation phase.
+    "battlerHPCap" => 25,
 	"battlerForm"   => [1]
 },	
   "VariableUp_repeat_every_4" => {
@@ -2139,8 +2224,8 @@ HOUNDOOM_REMATCH_MIDBATTLE = {
     "text" => [:Opposing, "{1} unleashes a crippling howl!"],
     "battlerStatus" => [:BURN, true]
   },
-  "TargetHPLow_foe" => {
-    "megaEvolve" => "It seems that her most Primal instints have awaken!",
+  "BattlerHPCritical_HOUNDOOMx_foe" => {
+    "houndoomBossMega" => "Houndoom unleashes her primal instincts and Mega Evolves!",
 	"battlerStats" => [:ATTACK, 1, :SPEED, 1, :DEFENSE, 1, :SPECIAL_DEFENSE, 1],
 	"battlerMoves" => [:FLAREBLITZ, :WICKEDBLOW, :DYNAMICPUNCH, :YAWN],
 	"teamEffects" => [:StealthRock, true, "{1} Shards of the rock fly across the battle feild!"],

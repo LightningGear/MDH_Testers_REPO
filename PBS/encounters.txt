@@ -975,6 +975,7 @@ Land,20
     7,IMPIDIMP,15
     2,MORELULL,15
     1,EKANS,15
+    10,MAKUHITA,15
 #-------------------------------
 [287] # Route 111
 Land,20
@@ -986,6 +987,7 @@ Land,20
     7,DOTTLER,15
     2,GOGOAT,15
     1,THIEVUL,15
+    10,CLOYSTER,15
 #-------------------------------
 [295] # Route 113
 Land,21
@@ -1009,6 +1011,7 @@ Land,21
     4,DRAMPA,29,34
     1,SHUCKLE,29,34
     1,SAWSBUCK,29,34
+    10,SWALOT,29,34
 #-------------------------------
 [292] # Route 114
 Land,21
@@ -1044,3 +1047,4 @@ Land,21
     5,DEWPIDER,14,20
     5,POLIWHIRL,15,20
     4,DACHSBUN,15,21
+    10,SHELLDER,15,20
